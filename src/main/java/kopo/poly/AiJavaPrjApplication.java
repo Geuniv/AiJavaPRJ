@@ -10,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -106,9 +107,9 @@ public class AiJavaPrjApplication implements CommandLineRunner {
 //        pDTO.setUserName("변변변");
 //        pDTO.setEmail("akakao@naver.com");
 //        pDTO.setAddr("서울");
-//
-//        /* 주요 로직인 서비스 호출 */
-//        rList = studentService.insertStudent(pDTO);
+
+        /* 주요 로직인 서비스 호출 */
+//        rList = studentService.insertStudent();
 
         /* Student 테이블 전체 조회 결과 출력 */
 //        rList.forEach(dto -> {
@@ -118,11 +119,61 @@ public class AiJavaPrjApplication implements CommandLineRunner {
 //            log.info("DB에 저장된 주소 : " + dto.getAddr());
 //        });
 
-        pDTO.setUserId("volbic");
+        List<StudentDTO> pList = new ArrayList<>();
+
+        for (int i = 1; i < 5; i++) {
+            pDTO = new StudentDTO();
+            pDTO.setUserId(i + "");
+            pDTO.setUserName("변형근");
+            pDTO.setEmail("sdkfso@nasdkf.com");
+            pDTO.setAddr("서울");
+            pList.add(pDTO);
+        }
+
+        log.info(pList + "");
+        rList = studentService.insertStudentList(pList);
+
+        rList.forEach(dto -> {
+            log.info("DB에 저장된 아이디 : " + dto.getUserId());
+            log.info("DB에 저장된 이름 : " + dto.getUserName());
+            log.info("DB에 저장된 이메일 : " + dto.getEmail());
+            log.info("DB에 저장된 주소 : " + dto.getAddr());
+        });
+
+        /* ----------------------------------------------------- */
+
+        /* 학생 수정하기 */
+        pDTO = new StudentDTO();
+
+        pDTO.setUserId("volbic"); // PK 컬럼인 회원 아이디를 기준으로 데이터를 수정함.
+        pDTO.setUserName("변변변_수정");
+        pDTO.setEmail("akakao@naver.com_수정");
+        pDTO.setAddr("서울_수정");
+
+        rList = studentService.updateStudent(pDTO);
+
+        rList.forEach(dto -> {
+            log.info("DB에 저장된 아이디 : " + dto.getUserId());
+            log.info("DB에 저장된 이름 : " + dto.getUserName());
+            log.info("DB에 저장된 이메일 : " + dto.getEmail());
+            log.info("DB에 저장된 주소 : " + dto.getAddr());
+        });
+
+        /* ----------------------------------------------------- */
+
+        /* 학생 삭제하기 */
+        pDTO = new StudentDTO();
+
+        pDTO.setUserId("volbic"); // DB 칼럼인 회원 아이디를 기준으로 데이터를 수정함
 
         rList = studentService.deleteStudent(pDTO);
 
-        log.info("DB에 삭제된 아이디 : " + pDTO.getUserId());
+        rList.forEach(dto -> {
+            log.info("DB에 저장된 아이디 : " + dto.getUserId());
+            log.info("DB에 저장된 이름 : " + dto.getUserName());
+            log.info("DB에 저장된 이메일 : " + dto.getEmail());
+            log.info("DB에 저장된 주소 : " + dto.getAddr());
+        });
 
         log.info("자바 프로그래밍 종료 !!");
     }
